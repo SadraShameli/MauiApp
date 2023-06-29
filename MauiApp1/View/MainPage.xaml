@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:MauiApp1.Model.Item"
+             xmlns:viewmodel="clr-namespace:MauiApp1.ViewModel"
+             x:DataType="viewmodel:ItemsViewModel"
+             x:Class="MauiApp1.MainPage"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding FilterItemsCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="filter_alt"
+                   />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+        <ToolbarItem Command="{Binding GetItemsCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="download"
+                   />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+
+
+        <CollectionView ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Item">
+
+                    <Frame>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ItemsViewModel}}, Path=GoToItemsDetailCommand}" CommandParameter="{Binding .}"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
+
+                        <HorizontalStackLayout Padding="25, 25, 0, 0">
+
+                            <Frame Padding="0" CornerRadius="100" IsClippedToBounds="True">
+                                <Image Source="{Binding ImageURL}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill"></Image>
+                            </Frame>
+
+                            <VerticalStackLayout Padding="10" Spacing="4" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" FontSize="24"></Label>
+
+                                <Label Text="{Binding Date}"></Label>
+
+                                <HorizontalStackLayout Spacing="4">
+
+                                    <Label FontSize="14">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Score: {0} | Availability: {1}">
+                                                <Binding Path="Score" />
+                                                <Binding Path="Availability" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </ScrollView>
+
+</ContentPage>
