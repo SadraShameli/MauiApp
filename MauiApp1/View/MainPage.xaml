@@ -10,68 +10,165 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding FilterItemsCommand}">
             <ToolbarItem.IconImageSource>
-                <FontImageSource
-                    FontFamily="MaterialIconsOutlined-Regular"
-                    Glyph="filter_alt"
-                   />
+                <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                 Glyph="filter_alt" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
 
         <ToolbarItem Command="{Binding GetItemsCommand}">
             <ToolbarItem.IconImageSource>
-                <FontImageSource
-                    FontFamily="MaterialIconsOutlined-Regular"
-                    Glyph="download"
-                   />
+                <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                 Glyph="download" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
 
+        <ToolbarItem Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ItemsViewModel}}, Path=GoToSignInPageCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                 Glyph="account_circle" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <ScrollView>
+    <Grid MaximumWidthRequest="{StaticResource MaxWidth}">
+        <ScrollView>
+            <RefreshView Command="{Binding GetItemsCommand}"
+                         IsRefreshing="{Binding IsRefreshing}">
+                <CollectionView ItemsSource="{Binding Items}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Item">
 
+                            <Frame>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ItemsViewModel}}, Path=GoToItemDetailsPageCommand}"
+                                                          CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                </Frame.GestureRecognizers>
 
-        <CollectionView ItemsSource="{Binding Items}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:Item">
+                                <HorizontalStackLayout Padding="25, 25, 0, 0">
 
-                    <Frame>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ItemsViewModel}}, Path=GoToItemsDetailCommand}" CommandParameter="{Binding .}"></TapGestureRecognizer>
-                        </Frame.GestureRecognizers>
+                                    <Frame Padding="0"
+                                           CornerRadius="100"
+                                           IsClippedToBounds="True">
+                                        <Image Source="{Binding ImageURL}"
+                                               HeightRequest="100"
+                                               WidthRequest="100"
+                                               Aspect="AspectFill"></Image>
+                                    </Frame>
 
-                        <HorizontalStackLayout Padding="25, 25, 0, 0">
+                                    <VerticalStackLayout Padding="10"
+                                                         Spacing="4"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="24"></Label>
 
-                            <Frame Padding="0" CornerRadius="100" IsClippedToBounds="True">
-                                <Image Source="{Binding ImageURL}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill"></Image>
-                            </Frame>
+                                        <Label Text="{Binding Date}"></Label>
 
-                            <VerticalStackLayout Padding="10" Spacing="4" VerticalOptions="Center">
-                                <Label Text="{Binding Name}" FontSize="24"></Label>
+                                        <HorizontalStackLayout Spacing="4">
 
-                                <Label Text="{Binding Date}"></Label>
+                                            <Label FontSize="14">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}Score: {0}   ·   Availability: {1}">
+                                                        <Binding Path="Score" />
+                                                        <Binding Path="Availability" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
 
-                                <HorizontalStackLayout Spacing="4">
-
-                                    <Label FontSize="14">
-                                        <Label.Text>
-                                            <MultiBinding StringFormat="{}Score: {0} | Availability: {1}">
-                                                <Binding Path="Score" />
-                                                <Binding Path="Availability" />
-                                            </MultiBinding>
-                                        </Label.Text>
-                                    </Label>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
 
                                 </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                            </Frame>
 
-                        </HorizontalStackLayout>
-                    </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </ScrollView>
 
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <!-- Bottom Navigation Bar -->
+        <AbsoluteLayout VerticalOptions="End"
+                        HorizontalOptions="Center">
+            <Frame>
+                <HorizontalStackLayout VerticalOptions="EndAndExpand"
+                                       HorizontalOptions="CenterAndExpand"
+                                       Spacing="5">
 
-    </ScrollView>
+                    <VerticalStackLayout>
+                        <Button BackgroundColor="Transparent"
+                                BorderColor="Transparent">
+
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                                 Glyph="home" />
+                            </Button.ImageSource>
+                        </Button>
+
+                        <Label Text="Home"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Button BackgroundColor="Transparent"
+                                BorderColor="Transparent">
+
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialSymbols-Outlined"
+                                                 Glyph="browse_activity" />
+                            </Button.ImageSource>
+                        </Button>
+
+                        <Label Text="Activity"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <Button BackgroundColor="{StaticResource Primary}"
+                            Margin="16,-35,0,0"
+                            WidthRequest="70"
+                            HeightRequest="70">
+
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                             Glyph="add_circle" />
+                        </Button.ImageSource>
+                    </Button>
+
+                    <VerticalStackLayout>
+                        <Button BackgroundColor="Transparent"
+                                BorderColor="Transparent">
+
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialSymbols-Outlined"
+                                                 Glyph="book_online" />
+                            </Button.ImageSource>
+                        </Button>
+
+                        <Label Text="Bookings"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Button BackgroundColor="Transparent"
+                                BorderColor="Transparent">
+
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialIconsOutlined-Regular"
+                                                 Glyph="mark_unread_chat_alt" />
+                            </Button.ImageSource>
+                        </Button>
+
+                        <Label Text="Messages"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                </HorizontalStackLayout>
+            </Frame>
+
+        </AbsoluteLayout>
+    </Grid>
 
 </ContentPage>

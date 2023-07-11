@@ -1,21 +1,21 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MauiApp1.Model.Item;
 using MauiApp1.Services;
-using CommunityToolkit.Mvvm.Input;
 using MauiApp1.View;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace MauiApp1.ViewModel
 {
     public partial class ItemsViewModel : BaseViewModel
     {
-        ItemsService itemsService;
+        private readonly ItemsService itemsService;
 
         public ObservableCollection<Item> Items { get; } = new();
 
 
         [ObservableProperty]
-        bool isRefreshing;
+        private bool isRefreshing;
 
 
         public ItemsViewModel(ItemsService itemsService)
@@ -25,27 +25,31 @@ namespace MauiApp1.ViewModel
         }
 
         [RelayCommand]
-        async Task GetItems()
+        private async Task GetItems()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             try
             {
-                var items = await itemsService.GetItems();
+                IsBusy = true;
+                List<Item> items = await itemsService.GetItems();
 
                 if (Items.Count != 0)
+                {
                     Items.Clear();
+                }
 
-
-                foreach (var item in items)
+                foreach (Item item in items)
                 {
                     Items.Add(item);
                 }
 
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -53,22 +57,31 @@ namespace MauiApp1.ViewModel
             finally
             {
                 IsBusy = false;
+                IsRefreshing = false;
             }
         }
 
         [RelayCommand]
-        async Task GoToItemsDetail(Item item)
+        private void FilterItems()
         {
-            if (item is null)
-                return;
-
-            await Shell.Current.GoToAsync($"{nameof(ItemsDetailPage)}", true, new Dictionary<string, object> { { nameof(Item), item } });
+            // Modify items collection or return a filtered list
         }
 
         [RelayCommand]
-        void FilterItems()
+        private async Task GoToItemDetailsPage(Item item)
         {
-            // Modify items collection or return a filtered list
+            if (item is null)
+            {
+                return;
+            }
+
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailsPage)}", true, new Dictionary<string, object> { { nameof(Item), item } });
+        }
+
+        [RelayCommand]
+        private async Task GoToSignInPage()
+        {
+            await Shell.Current.GoToAsync($"{nameof(UserSignInPage)}", true);
         }
     }
 }

@@ -9,23 +9,33 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        var builder = MauiApp.CreateBuilder();
+        MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialIconsOutlined-Regular.otf", "MaterialIconsOutlined-Regular");
-                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons-Regular");
+                fonts.AddFont("OpenSans-Regular.ttf");
+                fonts.AddFont("OpenSans-Semibold.ttf");
+                fonts.AddFont("MaterialIconsOutlined-Regular.otf");
+                fonts.AddFont("MaterialIcons-Regular.ttf");
+                fonts.AddFont("MaterialSymbols-Outlined.ttf");
             });
+
+
+        builder.Services.AddSingleton<MainPage>();
+
+        builder.Services.AddSingleton<UserSignInPage>();
+        builder.Services.AddSingleton<UserSignInViewModel>();
+        builder.Services.AddSingleton<UserSignUpPage>();
+        builder.Services.AddSingleton<UserSignUpViewModel>();
+        builder.Services.AddSingleton<UserProfilePage>();
+        builder.Services.AddSingleton<UserProfileViewModel>();
 
         builder.Services.AddSingleton<ItemsService>();
         builder.Services.AddSingleton<ItemsViewModel>();
-        builder.Services.AddTransient<ItemsDetailViewModel>();
+        builder.Services.AddTransient<ItemDetailsPage>();
+        builder.Services.AddTransient<ItemDetailsViewModel>();
 
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddTransient<ItemsDetailPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();
