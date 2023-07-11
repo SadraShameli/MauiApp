@@ -13,9 +13,16 @@ namespace MauiApp1.ViewModel
         }
 
         [RelayCommand]
-        async Task GoToSignUpPage()
+        private async Task GoToSignUpPage()
         {
             await Shell.Current.GoToAsync($"{nameof(UserSignUpPage)}", true);
+        }
+
+
+        [RelayCommand]
+        private void SubmitSignIn()
+        {
+            Preferences.Default.Set(nameof(Globals.IsFirstStartup), false);
         }
     }
 }

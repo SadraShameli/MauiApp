@@ -2,12 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using MauiApp1.Model.Item;
 using MauiApp1.Services;
-using MauiApp1.View;
 using System.Collections.ObjectModel;
 
 namespace MauiApp1.ViewModel
 {
-    public partial class ItemsViewModel : BaseViewModel
+    public partial class ItemsFilterViewModel : BaseViewModel
     {
         private readonly ItemsService itemsService;
 
@@ -18,9 +17,9 @@ namespace MauiApp1.ViewModel
         private bool isRefreshing;
 
 
-        public ItemsViewModel(ItemsService itemsService)
+        public ItemsFilterViewModel(ItemsService itemsService)
         {
-            Title = "Items";
+            Title = "Global Filter";
             this.itemsService = itemsService;
         }
 
@@ -62,27 +61,9 @@ namespace MauiApp1.ViewModel
         }
 
         [RelayCommand]
-        private async Task FilterItems()
+        private void FilterItems()
         {
-            await Shell.Current.GoToAsync($"{nameof(ItemsFilterPage)}", true);
             // Modify items collection or return a filtered list
-        }
-
-        [RelayCommand]
-        private async Task GoToItemDetailsPage(Item item)
-        {
-            if (item is null)
-            {
-                return;
-            }
-
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailsPage)}", true, new Dictionary<string, object> { { nameof(Item), item } });
-        }
-
-        [RelayCommand]
-        private async Task GoToSignInPage()
-        {
-            await Shell.Current.GoToAsync($"{nameof(UserSignInPage)}", true);
         }
     }
 }

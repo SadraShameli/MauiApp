@@ -41,7 +41,8 @@
 
             <StackLayout Spacing="50">
 
-                <Button Text="Sign in" />
+                <Button Text="Sign in"
+                        Command="{Binding SubmitSignInCommand}"/>
 
                 <Label Text="or"
                        HorizontalOptions="CenterAndExpand" />

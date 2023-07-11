@@ -21,7 +21,6 @@ public static class MauiProgram
                 fonts.AddFont("MaterialSymbols-Outlined.ttf");
             });
 
-
         builder.Services.AddSingleton<MainPage>();
 
         builder.Services.AddSingleton<UserSignInPage>();
@@ -33,6 +32,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ItemsService>();
         builder.Services.AddSingleton<ItemsViewModel>();
+        builder.Services.AddSingleton<ItemsFilterPage>();
+        builder.Services.AddSingleton<ItemsFilterViewModel>();
         builder.Services.AddTransient<ItemDetailsPage>();
         builder.Services.AddTransient<ItemDetailsViewModel>();
 
